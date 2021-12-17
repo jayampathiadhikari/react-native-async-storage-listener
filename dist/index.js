@@ -16,7 +16,7 @@ class Subscriber {
     }
 }
 class StorageListener {
-    constructor() {
+    constructor(initialState) {
         this.state = "";
         this.subscribers = [];
         this.setItem = (value) => {
@@ -43,8 +43,11 @@ class StorageListener {
             if (res) {
                 this.state = res;
             }
+            else {
+                initialState ? this.state = initialState : this.state = "";
+            }
         }).catch(err => {
-            this.state = "";
+            initialState ? this.state = initialState : this.state = "";
         });
     }
     ;
