@@ -5,7 +5,7 @@ declare class StorageListener {
     setItem: (value: string, channelKey: string) => void;
     getItem: (channelKey: string) => string;
     getChannels: () => Array<string>;
-    notifySubscribers: (channelKey: string) => void;
+    private notifySubscribers;
     addSubscriber: (callback: (state: string) => void, channelKey: string) => any;
     removeSubscriber: (key: string) => boolean;
     removeAllSubscribers: () => void;

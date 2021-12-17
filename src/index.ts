@@ -55,13 +55,12 @@ class StorageListener {
         return Object.keys(this.state)
     };
 
-    notifySubscribers = (channelKey:string): void => {
+     private notifySubscribers = (channelKey:string): void => {
         for (let key in this.subscribers) {
             let subscriber:Subscriber = this.subscribers[key];
             if(subscriber.channel === channelKey){
                 subscriber.update(this.state[channelKey])
             }
-
         }
     };
 
