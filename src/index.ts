@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-community/async-storage";
 
 //todo: add channels
-
 export const ACTIVITY_INFO = "ACTIVITY_INFO";
 
 class Subscriber {
@@ -16,28 +15,24 @@ class Subscriber {
     }
 }
 
-class Storage {
-    private state:string = "{}";
+class StorageListener {
+    private state:string = "";
     private subscribers:Array<Subscriber> = [];
 
     constructor(){
         AsyncStorage.getItem(ACTIVITY_INFO).then( res => {
             if(res){
                 this.state = res;
-            }else{
-                this.state = "[]";
             }
-
         }).catch( err => {
-            this.state = "[]"
+            this.state = ""
         })
     };
 
     setItem = (value:string) => {
         this.state = value;
         this.notifySubscribers();
-        AsyncStorage.setItem(ACTIVITY_INFO, value).then(r => {
-        })
+        AsyncStorage.setItem(ACTIVITY_INFO, value).then()
     };
 
     getItem = () => {
@@ -60,6 +55,4 @@ class Storage {
     };
 }
 
-const storageListener = new Storage();
-
-export default storageListener;
+export default StorageListener;
