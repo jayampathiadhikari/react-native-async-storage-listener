@@ -3,53 +3,73 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ACTIVITY_INFO = void 0;
 const async_storage_1 = __importDefault(require("@react-native-community/async-storage"));
-//todo: add channels
-exports.ACTIVITY_INFO = "ACTIVITY_INFO";
+const react_native_uuid_1 = __importDefault(require("react-native-uuid"));
+const ACTIVITY_INFO = "ACTIVITY_INFO";
 class Subscriber {
-    constructor(callback) {
+    constructor(callback, channel) {
         this.update = (state) => {
             this.callback(state);
         };
         this.callback = callback;
+        this.channel = channel;
     }
 }
 class StorageListener {
-    constructor(initialState) {
-        this.state = "";
-        this.subscribers = [];
-        this.setItem = (value) => {
-            this.state = value;
-            this.notifySubscribers();
-            async_storage_1.default.setItem(exports.ACTIVITY_INFO, value).then();
+    constructor() {
+        this.state = {};
+        this.subscribers = {};
+        this.setItem = (value, channelKey) => {
+            this.state[channelKey] = value;
+            this.notifySubscribers(channelKey);
+            async_storage_1.default.setItem(ACTIVITY_INFO, JSON.stringify(this.state)).then();
         };
-        this.getItem = () => {
-            return this.state;
+        this.getItem = (channelKey) => {
+            return this.state[channelKey];
         };
-        this.notifySubscribers = () => {
-            this.subscribers.forEach(subscriber => {
-                subscriber.update(this.state);
-            });
+        this.getChannels = () => {
+            return Object.keys(this.state);
         };
-        this.addSubscriber = (callback) => {
-            this.subscribers.push(new Subscriber(callback));
-            this.subscribers[this.subscribers.length - 1].update(this.state);
+        this.notifySubscribers = (channelKey) => {
+            for (let key in this.subscribers) {
+                let subscriber = this.subscribers[key];
+                if (subscriber.channel === channelKey) {
+                    subscriber.update(this.state[channelKey]);
+                }
+            }
         };
-        this.removeAllSubscribers = () => {
-            this.subscribers = [];
-        };
-        async_storage_1.default.getItem(exports.ACTIVITY_INFO).then(res => {
-            if (res) {
-                this.state = res;
+        this.addSubscriber = (callback, channelKey) => {
+            if (this.state[channelKey]) {
+                const key = react_native_uuid_1.default.v4().toString();
+                this.subscribers[key] = new Subscriber(callback, channelKey);
+                this.subscribers[key].update(this.state[channelKey]);
+                return { success: true, message: "subscribed to channel", subscriber_id: key };
             }
             else {
-                initialState ? this.state = initialState : this.state = "";
+                return { success: false, message: "channel not found. use an existing channel key" };
             }
-        }).catch(err => {
-            initialState ? this.state = initialState : this.state = "";
+        };
+        this.removeSubscriber = (key) => {
+            if (this.subscribers[key]) {
+                return (delete this.subscribers[key]);
+            }
+            else {
+                return false;
+            }
+        };
+        this.removeAllSubscribers = () => {
+            this.subscribers = {};
+        };
+        async_storage_1.default.getItem(ACTIVITY_INFO).then(res => {
+            if (res) {
+                if (typeof res === "string") {
+                    this.state = JSON.parse(res);
+                }
+            }
+        }).catch((e) => {
+            throw Error(e.message);
         });
     }
     ;
 }
-exports.default = StorageListener;
+exports.default = new StorageListener();

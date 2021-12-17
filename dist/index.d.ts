@@ -1,12 +1,14 @@
-export declare const ACTIVITY_INFO = "ACTIVITY_INFO";
 declare class StorageListener {
     private state;
     private subscribers;
-    constructor(initialState?: string);
-    setItem: (value: string) => void;
-    getItem: () => string;
-    notifySubscribers: () => void;
-    addSubscriber: (callback: Function) => void;
+    constructor();
+    setItem: (value: string, channelKey: string) => void;
+    getItem: (channelKey: string) => string;
+    getChannels: () => Array<string>;
+    private notifySubscribers;
+    addSubscriber: (callback: (state: string) => void, channelKey: string) => any;
+    removeSubscriber: (key: string) => boolean;
     removeAllSubscribers: () => void;
 }
-export default StorageListener;
+declare const _default: StorageListener;
+export default _default;
