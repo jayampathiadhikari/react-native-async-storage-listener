@@ -6,13 +6,13 @@ import uuid from 'react-native-uuid';
 export const ACTIVITY_INFO = "ACTIVITY_INFO";
 
 class Subscriber {
-    private readonly callback : Function;
+    private readonly callback : (state:string)=>{};
 
-    constructor(callback: Function){
+    constructor(callback: (state:string)=>{}){
         this.callback = callback
     }
 
-    update = (state: string | null)=> {
+    update = (state: string)=> {
         this.callback(state)
     }
 }
@@ -54,7 +54,7 @@ class StorageListener {
         }
     };
 
-    addSubscriber = (callback: Function) : string => {
+    addSubscriber = (callback: (state:string)=>{}) : string => {
         const key = uuid.v4().toString();
         this.subscribers[key] = new Subscriber(callback);
         this.subscribers[key].update(this.state);
