@@ -66,7 +66,7 @@ class StorageListener {
             const key = uuid.v4().toString();
             this.subscribers[key] = new Subscriber(callback, channelKey);
             this.subscribers[key].update(this.state[channelKey]);
-            return {success: true, subscriber_id: key}
+            return {success: true, message: "subscribed to channel", subscriber_id: key}
         }else{
             return {success:false , message: "channel not found. use an existing channel key"}
         }
