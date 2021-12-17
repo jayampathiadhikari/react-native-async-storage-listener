@@ -35,5 +35,17 @@
   "bugs": {
     "url": "https://github.com/jayampathiadhikari/react-native-async-storage-listener/issues"
   },
-  "homepage": "https://github.com/jayampathiadhikari/react-native-async-storage-listener#readme"
+  "homepage": "https://github.com/jayampathiadhikari/react-native-async-storage-listener#readme",
+  "keywords": [
+    "React Native",
+    "iOS",
+    "Android",
+    "AsyncStorage",
+    "Publisher",
+    "Subscriber",
+    "Listener",
+    "pubsub",
+    "data store",
+    "key value store"
+  ]
 }

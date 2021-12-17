@@ -1,7 +1,7 @@
 # react-native-async-storage-listener #
 
 A wrapper around React Native's AsyncStorage with a listener. Multiple Channels are supported.
-
+Can be used where redux is not available.
 
 ## Usage
 ````js
