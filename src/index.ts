@@ -1,15 +1,15 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import uuid from 'react-native-uuid';
 
-//todo: add channels
-
-export const ACTIVITY_INFO = "ACTIVITY_INFO";
+const ACTIVITY_INFO = "ACTIVITY_INFO";
 
 class Subscriber {
     private readonly callback : (state:string)=>{};
+    public channel: string;
 
-    constructor(callback: (state:string)=>{}){
-        this.callback = callback
+    constructor(callback: (state:string)=>{}, channel:string){
+        this.callback = callback;
+        this.channel = channel;
     }
 
     update = (state: string)=> {
@@ -21,44 +21,55 @@ interface Subscribers {
     [key:string] : Subscriber
 }
 
+interface State {
+    [key:string] : string
+}
+
 class StorageListener {
-    private state:string = "";
+    private state:State = {};
     private subscribers: Subscribers = {};
 
-    constructor(initialState?:string){
+    constructor(){
         AsyncStorage.getItem(ACTIVITY_INFO).then( res => {
             if(res){
-                this.state = res;
-            }else{
-                initialState ? this.state = initialState: this.state = ""
+                this.state = JSON.parse(res);
             }
-        }).catch( err => {
-            initialState ? this.state = initialState: this.state = ""
         })
     };
 
-    setItem = (value:string) : void => {
-        this.state = value;
-        this.notifySubscribers();
-        AsyncStorage.setItem(ACTIVITY_INFO, value).then()
+    setItem = (value:string, channelKey:string) : void => {
+        this.state[channelKey] = value;
+        this.notifySubscribers(channelKey);
+        AsyncStorage.setItem(ACTIVITY_INFO, JSON.stringify(this.state)).then()
     };
 
-    getItem = () : string => {
-        return this.state;
+    getItem = (channelKey:string) : string => {
+        return this.state[channelKey];
     };
 
-    notifySubscribers = (): void => {
+    getChannels = () : Array<string> => {
+        return Object.keys(this.state)
+    };
+
+    notifySubscribers = (channelKey:string): void => {
         for (let key in this.subscribers) {
             let subscriber:Subscriber = this.subscribers[key];
-            subscriber.update(this.state)
+            if(subscriber.channel === channelKey){
+                subscriber.update(this.state[channelKey])
+            }
+
         }
     };
 
-    addSubscriber = (callback: (state:string)=>{}) : string => {
-        const key = uuid.v4().toString();
-        this.subscribers[key] = new Subscriber(callback);
-        this.subscribers[key].update(this.state);
-        return key
+    addSubscriber = (callback: (state:string)=>{}, channelKey:string) : any => {
+        if(this.state[channelKey]){
+            const key = uuid.v4().toString();
+            this.subscribers[key] = new Subscriber(callback, channelKey);
+            this.subscribers[key].update(this.state[channelKey]);
+            return {success: true, subscriber_id: key}
+        }else{
+            return {success:false , message: "channel not found. use an existing channel key"}
+        }
     };
 
     removeSubscriber = (key:string): boolean => {
