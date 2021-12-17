@@ -1,7 +1,7 @@
 {
   "name": "react-native-async-storage-listener",
   "version": "1.0.0",
-  "description": "",
+  "description": "A wrapper around React Native's AsyncStorage with a listener.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,6 +9,11 @@
   },
   "author": "jayampathiadhikari",
   "license": "ISC",
+  "files": [
+    "dist",
+    "package.json",
+    "Readme.md"
+  ],
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "eslint": "^8.4.1",
@@ -29,5 +34,6 @@
   },
   "bugs": {
     "url": "https://github.com/jayampathiadhikari/react-native-async-storage-listener/issues"
-  }
+  },
+  "homepage": "https://github.com/jayampathiadhikari/react-native-async-storage-listener#readme"
 }
