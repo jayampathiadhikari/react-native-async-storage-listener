@@ -57,7 +57,7 @@ StorageListener.removeAllSubscribers();
 
 ## API Reference
 
-### setItem
+## setItem
 creates new channel or updates the value of an existing channel
 
 **parameters**
@@ -68,7 +68,7 @@ creates new channel or updates the value of an existing channel
 
 **returns**: `void`
 
-### getItem
+## getItem
 get value of an existing channel
 
 **parameters**
@@ -77,14 +77,14 @@ get value of an existing channel
 
 **returns**: `string`
 
-### getChannels
+## getChannels
 get all available existing channels
 
 **parameters**: none
 
 **returns**: `Array<string>`
 
-### addSubscriber
+## addSubscriber
 add a new subscriber
 
 **parameters**
@@ -95,7 +95,7 @@ add a new subscriber
 
 **returns**: `{success: true, message: "subscribed to channel", subscriber_id: key} | {success:false , message: "channel not found. use an existing channel key"}`
 
-### removeSubscriber
+## removeSubscriber
 remove a subscriber
 
 **parameters**
@@ -104,7 +104,7 @@ remove a subscriber
 
 **returns**: `boolean`
 
-### removeAllSubscribers
+## removeAllSubscribers
 remove all subscribers
 
 **parameters**: none
