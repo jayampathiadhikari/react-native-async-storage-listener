@@ -4,10 +4,10 @@ import uuid from 'react-native-uuid';
 const ACTIVITY_INFO = "ACTIVITY_INFO";
 
 class Subscriber {
-    private readonly callback : (state:string)=>{};
+    private readonly callback : (state:string)=>void;
     public channel: string;
 
-    constructor(callback: (state:string)=>{}, channel:string){
+    constructor(callback: (state:string)=>void, channel:string){
         this.callback = callback;
         this.channel = channel;
     }
@@ -32,8 +32,12 @@ class StorageListener {
     constructor(){
         AsyncStorage.getItem(ACTIVITY_INFO).then( res => {
             if(res){
-                this.state = JSON.parse(res);
+                if (typeof res === "string") {
+                    this.state = JSON.parse(res);
+                }
             }
+        }).catch((e:any) => {
+            throw Error(e.message)
         })
     };
 
@@ -61,7 +65,7 @@ class StorageListener {
         }
     };
 
-    addSubscriber = (callback: (state:string)=>{}, channelKey:string) : any => {
+    addSubscriber = (callback: (state:string)=>void, channelKey:string) : any => {
         if(this.state[channelKey]){
             const key = uuid.v4().toString();
             this.subscribers[key] = new Subscriber(callback, channelKey);
@@ -85,4 +89,4 @@ class StorageListener {
     };
 }
 
-export default StorageListener;
+export default new StorageListener();

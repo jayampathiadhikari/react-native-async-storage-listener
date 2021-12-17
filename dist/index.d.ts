@@ -6,8 +6,9 @@ declare class StorageListener {
     getItem: (channelKey: string) => string;
     getChannels: () => Array<string>;
     notifySubscribers: (channelKey: string) => void;
-    addSubscriber: (callback: (state: string) => {}, channelKey: string) => any;
+    addSubscriber: (callback: (state: string) => void, channelKey: string) => any;
     removeSubscriber: (key: string) => boolean;
     removeAllSubscribers: () => void;
 }
-export default StorageListener;
+declare const _default: StorageListener;
+export default _default;

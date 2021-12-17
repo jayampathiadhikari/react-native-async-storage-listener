@@ -43,7 +43,7 @@ class StorageListener {
                 const key = react_native_uuid_1.default.v4().toString();
                 this.subscribers[key] = new Subscriber(callback, channelKey);
                 this.subscribers[key].update(this.state[channelKey]);
-                return { success: true, subscriber_id: key };
+                return { success: true, message: "subscribed to channel", subscriber_id: key };
             }
             else {
                 return { success: false, message: "channel not found. use an existing channel key" };
@@ -62,10 +62,14 @@ class StorageListener {
         };
         async_storage_1.default.getItem(ACTIVITY_INFO).then(res => {
             if (res) {
-                this.state = JSON.parse(res);
+                if (typeof res === "string") {
+                    this.state = JSON.parse(res);
+                }
             }
+        }).catch((e) => {
+            throw Error(e.message);
         });
     }
     ;
 }
-exports.default = StorageListener;
+exports.default = new StorageListener();
