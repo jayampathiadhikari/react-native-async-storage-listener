@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-community/async-storage";
+import uuid from 'react-native-uuid';
 
 //todo: add channels
+
 export const ACTIVITY_INFO = "ACTIVITY_INFO";
 
 class Subscriber {
@@ -15,9 +17,13 @@ class Subscriber {
     }
 }
 
+interface Subscribers {
+    [key:string] : Subscriber
+}
+
 class StorageListener {
     private state:string = "";
-    private subscribers:Array<Subscriber> = [];
+    private subscribers: Subscribers = {};
 
     constructor(initialState?:string){
         AsyncStorage.getItem(ACTIVITY_INFO).then( res => {
@@ -31,29 +37,40 @@ class StorageListener {
         })
     };
 
-    setItem = (value:string) => {
+    setItem = (value:string) : void => {
         this.state = value;
         this.notifySubscribers();
         AsyncStorage.setItem(ACTIVITY_INFO, value).then()
     };
 
-    getItem = () => {
+    getItem = () : string => {
         return this.state;
     };
 
-    notifySubscribers = () => {
-        this.subscribers.forEach( subscriber => {
+    notifySubscribers = (): void => {
+        for (let key in this.subscribers) {
+            let subscriber:Subscriber = this.subscribers[key];
             subscriber.update(this.state)
-        })
+        }
     };
 
-    addSubscriber = (callback: Function) => {
-        this.subscribers.push(new Subscriber(callback));
-        this.subscribers[this.subscribers.length - 1].update(this.state);
+    addSubscriber = (callback: Function) : string => {
+        const key = uuid.v4().toString();
+        this.subscribers[key] = new Subscriber(callback);
+        this.subscribers[key].update(this.state);
+        return key
     };
 
-    removeAllSubscribers = () => {
-        this.subscribers = []
+    removeSubscriber = (key:string): boolean => {
+        if(this.subscribers[key]){
+            return (delete this.subscribers[key])
+        }else{
+            return false
+        }
+    };
+
+    removeAllSubscribers = (): void => {
+        this.subscribers = {}
     };
 }
 
