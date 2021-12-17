@@ -19,13 +19,15 @@ class StorageListener {
     private state:string = "";
     private subscribers:Array<Subscriber> = [];
 
-    constructor(){
+    constructor(initialState?:string){
         AsyncStorage.getItem(ACTIVITY_INFO).then( res => {
             if(res){
                 this.state = res;
+            }else{
+                initialState ? this.state = initialState: this.state = ""
             }
         }).catch( err => {
-            this.state = ""
+            initialState ? this.state = initialState: this.state = ""
         })
     };
 
