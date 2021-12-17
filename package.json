@@ -20,5 +20,12 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayampathiadhikari/react-native-async-storage-listener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jayampathiadhikari/react-native-async-storage-listener/issues"
   }
 }
