@@ -9,18 +9,18 @@ Can be used where redux is not available.
 import StorageListener from react-native-async-storage-listener
 
 //test classes for subscribe demonstration
-class TestClassA{
+class TestClassA {
     callback = (text:string)=> {
-        console.log('CALLBACK CALLED FOR CLASS A:', text)
+        console.log('CALLBACK CALLED FOR INSTANCE OF CLASS A:', text)
     }
     callbackSecond = (text:string)=> {
-        console.log('SECOND CALLBACK CALLED FOR CLASS A:', text)
+        console.log('SECOND CALLBACK CALLED FOR INSTANCE OF CLASS A:', text)
     }
 }
 
-class TestClassB{
+class TestClassB {
     callback = (text:string)=> {
-        console.log('CALLBACK CALLED FOR CLASS B:', text)
+        console.log('CALLBACK CALLED FOR INSTANCE OF CLASS B:', text)
     }
 }
 

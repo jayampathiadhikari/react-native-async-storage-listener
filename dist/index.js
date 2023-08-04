@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const async_storage_1 = __importDefault(require("@react-native-community/async-storage"));
+const async_storage_1 = __importDefault(require("@react-native-async-storage/async-storage"));
 const react_native_uuid_1 = __importDefault(require("react-native-uuid"));
 const ACTIVITY_INFO = "ACTIVITY_INFO";
 class Subscriber {
