@@ -47,6 +47,7 @@
     "Listener",
     "pubsub",
     "data store",
-    "key value store"
+    "key value store",
+    "redux"
   ]
 }
