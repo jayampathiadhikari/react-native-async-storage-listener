@@ -51,6 +51,16 @@ class StorageListener {
         return this.state[channelKey];
     };
 
+    clearItem = (channelKey: string): void => {
+        for (let key in this.subscribers) {
+            let subscriber: Subscriber = this.subscribers[key];
+            if (subscriber.channel === channelKey) {
+                delete this.subscribers[key]
+            }
+        }
+        delete this.state[channelKey]
+    };
+
     getChannels = (): Array<string> => {
         return Object.keys(this.state)
     };
@@ -86,6 +96,10 @@ class StorageListener {
     removeAllSubscribers = (): void => {
         this.subscribers = {}
     };
-}
+
+    private removeSubscribers = ():  void => {
+
+    };
+}   
 
 export default new StorageListener();
